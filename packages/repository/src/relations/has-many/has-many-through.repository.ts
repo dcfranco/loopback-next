@@ -7,6 +7,7 @@ import {
   constrainDataObject,
   constrainFilter,
   constrainWhere,
+  constrainWhereOr,
   Count,
   DataObject,
   Entity,
@@ -16,7 +17,6 @@ import {
   Options,
   Where,
 } from '../..';
-import {constrainWhereOr} from '../../repositories/constraint-utils';
 
 /**
  * CRUD operations for a target repository of a HasManyThrough relation
@@ -185,15 +185,6 @@ export class DefaultHasManyThroughRepository<
     );
   }
 
-  // 1. Given through links: {sourceId: 1, targetId: 1} and {sourceId: 2, targetId: 2}.
-  // When delete all models belonging to source id 1,
-  // then the target model id 1 and the first link is deleted.
-
-  // 2. Given trough links {sourceId: 1, targetId: 1}, {sourceId: 2, targetId: 1}
-  // and {sourceId: 2, targetId: 2}.
-  // When delete all models belonging to source id 1,
-  // then the target model id 1 and the first two links are deleted.
-  // Only {sourceId: 2, targetId: 2} link is preserved
   async delete(
     where?: Where<TargetEntity>,
     options?: Options & {
